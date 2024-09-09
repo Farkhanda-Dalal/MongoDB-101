@@ -1,0 +1,203 @@
+Commands for database:
+
+1.    View all database:
+        show dbs
+
+2.    Create database or switch to pre-existing database:
+        use db_name
+eg. Create database named Shop:
+       use Shop
+eg. Switch to pre-existing database Admin:
+        use Admin
+
+3.    View name of database you are currently in:
+        db
+
+4.    Drop a database
+        db.dropDatabase()
+eg. Drop database named Shop:
+       db.dropDatabase()
+
+----------------------------------------------
+Commands for Collections:
+
+1.     View collections in a database:
+        show collections
+
+2.    Add collection in database:
+        db.createCollection('collection_name')
+eg. Create collection named Product:
+        db.createCollection('Product')
+
+3.    Drop collection:
+        db.collection_name.drop()
+eg. Drop collection named Product:
+        db.Product.drop()
+
+4.   Rename collections:
+       db.collection_name.renameCollection("new_collection_name")
+eg.db.Product.renameCollection("product")
+
+---------------------------------------------------
+Commands for Documents:
+
+1.     Insert 1 Document:
+        db.collection_name.insert({//code})
+eg. Insert a document with name,id,price of product in Product collection:
+        db.Product.insertOne({
+        'Name':'Clothes',
+        'Id':12345,
+        'Price':300})
+
+2. Insert Multiple Documents:
+    db.collection_name.insertMany([{}])
+eg. db.Product.insertMany([
+    {'Name':'Mobile', 'Brand':'One Plus', 'Id':909, 'Price':25000},
+    {'Name':'Laptop','Id':100, 'Price':125000},
+])
+
+3.  View all documents in a Colletion:
+	db.collection_name.find()
+	db.collection_name.find().pretty()
+eg. View all rows in Collection Product:
+	db.Product.find()
+
+4. Seacrh a document in collection:
+	db.collection_name.find({//code})
+	db.Product.find({Id:100})
+
+5. Limit:
+db.collection_name({//code}).limit(//val)
+
+6. View in sorted form (ascending)
+db.collection_name.find().sort(field,1)
+
+6. View in sorted form (decending)
+db.collection_name.find().sort(field,-1)
+
+7. Count no of rows:
+db.collection_name.find().count()
+
+8. Find only 1 document:
+db.collection_name.findOne()
+
+9. Update pre-existing document:
+db.Product.update({ Name: 'Charger' }, 
+{ $set:{Name: 'Charger', Id: 805 }},)
+
+10. Update unexisting document:
+db.Product.update({ Name: 'Charger' }, 
+{ $set:{Name: 'Charger', Id: 805 }},
+{upsert:true})
+
+if you write update then only one field is updated with there are multiple same name fields,
+so it is better to use updateOne or updateMany
+
+11.Update Many:
+ db.Product.updateMany({Name:'Clothes'},{$inc:{Price:2}})
+
+if you forget to wrire $set while updating then error will be shown:
+eg: db.Product.updateOne({Name:'Clothes',Id:12},{Id:123})
+error:MongoInvalidArgumentError: Update document requires atomic operators
+
+----------------------PROJECTION-----------------------
+
+12. Include Specific field in Result:
+db.Product.find({Name:"Clothes"},{Name:1})
+
+13.Exclude Specific Field in Result:
+db.Product.find({Name:"Clothes"},{Name:0})
+
+Cannot do inclusion exclusion in same projection command:
+eg. db.Product.find({Name:"Clothes"},{Price:1},{Id:0})
+This will give error:
+MongoServerError: Cannot do exclusion on field Id in inclusion projection
+
+14. Delete One:
+db.Product.deleteOne({Name:'Clothes'})
+
+15. Delete Many:
+db.Product.deleteMany({Name:'Clothes'})
+
+---------------------------------------------------------------------------------------
+Rename commands:
+
+
+
+2. Rename field:
+db.collection_name.updateMany({},{$rename:{"old_field_name":"new_field_name"}})
+db.veg.updateMany({},{$rename:{"name":"dish_name"}})
+
+Finding field from an object within the main object:
+db.movies.find({"imdb.votes":{$gt:1000}})
+
+Start with letter a:
+db.movies.find({ title: { $regex: /^a/i } });
+or db.movies.find({ title: { $regex: /^a/, $options: 'i' } });
+
+End with letter a:
+db.movies.find({title:{$regex:/a$/i}},{title:1}) or
+db.movies.find({ title: { $regex: /a$/, $options: 'i' } });
+
+Contain word scene followed by other letters, chars:
+db.movies.find({title:{$regex:{/scene/}})
+eg:  {
+    _id: ObjectId('573a13b5f29313caabd440be'),
+    title: 'Scenes of a Sexual Nature'
+  },
+  {
+    _id: ObjectId('573a13c2f29313caabd677b3'),
+    title: 'The Scenesters'
+  },
+  {
+    _id: ObjectId('573a1398f29313caabcea084'),
+    title: 'Scene of the Crime'
+  },
+  {
+    _id: ObjectId('573a1399f29313caabcecebf'),
+    title: 'A Scene at the Sea'
+  }
+
+Contain scene as whole word:
+db.movies.find({title:{$regex:/\bscene\b/i}},{title:1})
+eg:
+  {
+    _id: ObjectId('573a1398f29313caabcea084'),
+    title: 'Scene of the Crime'
+  },
+  {
+    _id: ObjectId('573a1399f29313caabcecebf'),
+    title: 'A Scene at the Sea'
+  }
+
+Match documents where the phone field contains only digits and dashes:
+db.contacts.find({ phone: { $regex: /^[0-9-]+$/, $options: 'i' } });
+
+Match a specific number of occurrences of a character:
+
+Pattern: /a{3}/
+Description: Matches exactly three occurrences of the character "a".
+Match a range of occurrences of a character:
+
+Pattern: /a{2,4}/
+Description: Matches between two and four occurrences of the character "a".
+Match any character except specific ones:
+
+Pattern: /[^aeiou]/
+Description: Matches any character that is not a vowel (a, e, i, o, u).
+Match specific characters:
+
+Pattern: /[aeiou]/
+Description: Matches any vowel character (a, e, i, o, u).
+
+
+
+
+
+
+
+
+
+
+
+
