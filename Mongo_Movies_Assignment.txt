@@ -1,0 +1,75 @@
+Q1. Find all movies with full information from the 'movies' collection that released in the year 1893.
+A1. db.movies.find({year:1893})
+
+Q2. Find all movies with full information from the 'movies' collection that have a runtime greater than 120 minutes.
+A2.  db.movies.find({runtime:{$gt:120}})
+
+Q3. Find all movies with full information from the 'movies' collection that have "Short" genre.
+A3. db.movies.find({genres:"Short"})
+
+Q4. Retrieve all movies from the 'movies' collection that were directed by "William K.L. Dickson" and include complete information for each movie.
+A4. db.movies.find({"directors":"William K.L. Dickson"})
+
+Q5. Retrieve all movies from the 'movies' collection that were released in the USA and include complete information for each movie.
+A5. db.movies.find({"countries":"USA"})
+
+Q6. Retrieve all movies from the 'movies' collection that have complete information and are rated as "UNRATED".
+A6. db.movies.find({rated:"UNRATED"})
+
+Q7. Retrieve all movies from the 'movies' collection that have complete information and have received more than 1000 votes on IMDb.
+db.movies.find({"imdb.votes":{$gt:1000}})
+
+Q8. Retrieve all movies from the 'movies' collection that have complete information and have an IMDb rating higher than 7.
+A8. db.movies.find({"imdb.rating":{$gt:7}})
+
+Q9. Retrieve all movies from the 'movies' collection that have complete information and have a viewer rating higher than 4 on Tomatoes.
+A9. db.movies.find({"tomatoes.viewer.rating":{$gt:4}})
+
+Q10. Retrieve all movies from the 'movies' collection that have received an award.
+A10. db.movies.find({"awards.wins":{$gte:1}})
+
+Q11.  Find all movies with title, languages, released, directors, writers, awards, year, genres, runtime, cast, countries from the 'movies' collection in MongoDB that have at least one nomination.
+A11. db.movies.find({"awards.nominations":{$gte:1}},
+{title:1,languages:1,released:1,directors:1,writers:1,awards:1,year:1,genres:1,runtime:1,cast:1,countries:1})
+
+Q12. Find all movies with title, languages, released, directors, writers, awards, year, genres, runtime, cast, countries from the 'movies' collection in MongoDB with cast including "Charles Kayser".
+A12. db.movies.find({cast:"Charles Kayser"},
+{title:1,languages:1,released:1,directors:1,writers:1,awards:1,year:1,genres:1,runtime:1,cast:1,countries:1})
+
+Q13. Retrieve all movies with title, languages, released, directors, writers, countries from the 'movies' collection in MongoDB that released on May 9, 1893.
+A13. db.movies.find({released:new Date("1893-05-09")},
+{title:1,languages:1,released:1,directors:1,writers:1,awards:1,year:1,genres:1,runtime:1,cast:1,countries:1})
+					OR
+db.movies.find({released:ISODate("1893-05-09T00:00:00.000Z")},
+{title:1,languages:1,released:1,directors:1,writers:1,awards:1,year:1,genres:1,runtime:1,cast:1,countries:1})
+
+Q14. Retrieve all movies with title, languages, released, directors, writers, countries from the 'movies' collection in MongoDB that have a word "scene" in the title.
+A14. db.movies.find({title:{$regex:/scene/i}},
+{title:1,languages:1,released:1,directors:1,writers:1,awards:1,year:1,genres:1,runtime:1,cast:1,countries:1})
+
+Q15. Find all movies with title, languages, released, directors, viewer, writers, countries from the 'movies' collection in MongoDB that have a viewer rating of at least 3 and less than 4 on Tomatoes.
+A15. db.movies.find({"tomatoes.viewer.rating":{$gte:3,$lt:4}},
+{title:1,languages:1,released:1,directors:1,writers:1,awards:1,year:1,genres:1,runtime:1,cast:1,countries:1})
+
+Q16. Retrieve all movies with title, languages, released, year, directors, writers, countries from the 'movies' collection in MongoDB that released before the year 1900.
+db.movies.find({year:{$lt:1900}},
+{title:1,languages:1,released:1,year:1,directors:1,writers:1,countries:1})
+
+Q17. Find all movies with title, languages, fullplot, released, directors, writers, countries from the 'movies' collection in MongoDB that have a fullplot containing the word "fire".
+A17. db.movies.find({fullplot:{$regex:/\bfire\b/i}},
+{title:1,languages:1,fullplot:1,released:1,directors:1,writers:1,countries:1})
+
+Q18. Return all movies with title, languages, plot, released, directors, writers, and countries from the 'movies' collection in MongoDB where the word "beer" mentioned in the plot.
+A18. db.movies.find({plot:{$regex:/\bbeer\b/i}},
+{title:1,languages:1,plot:1,released:1,directors:1,writers:1,countries:1})
+
+Q19.  Return all movies with title, languages, fullplot, released, directors, writers, and countries from the 'movies' collection in MongoDB where the word "metal" mentioned in the fullplot.
+db.movies.find({fullplot:{$regex:/\bmetal\b/i}},
+{title:1,languages:1,fullplot:1,released:1,directors:1,writers:1,countries:1})
+
+Q20. Find all movies with title, languages, released, runtime, directors, writers, countries from the 'movies' collection in MongoDB that have a runtime between 60 and 90 minutes.
+A20. db.movies.find({runtime:{$gte:60,$lte:90}},
+{title:1,languages:1, released:1, runtime:1, directors:1, writers:1, countries:1})
+
+Q21. Find all movies with title, languages, released, runtime, directors, writers, countries, imdb from the 'movies' collection in MongoDB for the top 5 movies with the highest IMDb ratings.
+A21. db.movies.find({},{title:1, languages:1, released:1, runtime:1, directors:1, writers:1, countries:1, imdb:1}).sort("imdb.ratings":-1).limit(5)
